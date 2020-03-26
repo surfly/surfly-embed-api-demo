@@ -1,0 +1,73 @@
+<html>
+<body>
+<style>
+.layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+#embed-frame {
+    height: 100%;
+}
+.embed-button {
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+</style>
+<div class="layout">
+    <h1>Surfly Embed API demo</h1>
+    <p>
+        For security reasons, this demo page works only with existing agents identified by agent ID.
+        When you implement this in your code, you can also identify agents by email/name, and create new agents.
+    </p>
+    <p>
+        The Embed API docs can be found <a href="https://docs.surfly.com/embed.html">here</a>
+    </p>
+
+    {% if agent_token %}
+    <div>
+        <p>
+            Agent token: <b><span id="token">{{ agent_token }}</span></b>
+            <a href="/">Reset</a>
+        </p>
+        <p>
+            Agent role: <b><span id="role">{{ agent_role }}</span></b>
+        </p>
+        <p>
+            Press a button below to show a corresponding Embed view:
+        </p>
+
+        <button class="embed-button" id="open-start" onclick="openEmbed('start')">Start Page (all roles)</button>
+        <button class="embed-button" id="open-queue" onclick="openEmbed('queue')">Queue Page (all roles)</button>
+        <button class="embed-button" id="open-history" onclick="openEmbed('history')">Usage History (admins and managers)</button>
+        <button class="embed-button" id="open-options" onclick="openEmbed('options')">Company Options (only admins)</button>
+    </div>
+
+    <h4 id="embed-url"></h4>
+    <iframe
+        id="embed-frame"
+        name="embed-frame"
+    ></iframe>
+    <script>
+        var agent_token = '{{ agent_token }}';
+        function openEmbed(view) {
+            var url = 'https://app.surfly.com/embed/' + view + '/?agent_token=' + agent_token;
+            document.querySelector('#embed-frame').src = url;
+            document.querySelector('#embed-url').textContent = url;
+        }
+    </script>
+    {% else %}
+    <div>
+        Enter the data below to obtain a temporary agent access token
+        <form method=post>
+            <input placeholder="REST key" size="40" name="api_key" />
+            <input placeholder="Agent ID" type="number" size="4" name="agent_id" />
+            <input type="submit" />
+        </form>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
