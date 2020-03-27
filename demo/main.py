@@ -7,6 +7,9 @@ application = Flask(__name__)
 def home():
     agent_token = None
     agent_role = None
+    server_name = 'surfly.com'
+    if request.args.get('s3', ''):
+        server_name = 'surfly-s3.com'
     if request.method == 'POST':
         api_key = request.form.get('api_key')
         agent_id = request.form.get('agent_id')
@@ -23,7 +26,7 @@ def home():
         agent_id = int(agent_id.strip())
 
         resp = requests.post(
-            'https://surfly.com/v2/agents/access-token/?api_key=%s' % api_key,
+            'https://%s/v2/agents/access-token/?api_key=%s' % (server_name, api_key),
             verify=True,
             json={
                 "agent_id": agent_id,
@@ -41,5 +44,6 @@ def home():
         'home.html',
         agent_token=agent_token,
         agent_role=agent_role,
+        server_name=server_name,
     )
 
