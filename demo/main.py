@@ -34,7 +34,7 @@ def home():
         )
 
         if resp.status_code != 200:
-            return 'API error', 400
+            return 'API error: %s %s' % (resp.status_code, resp.content), 400
 
         resp_data = resp.json()
         agent_token = resp_data['agent_token']
