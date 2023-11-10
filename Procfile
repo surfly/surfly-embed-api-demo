@@ -1,2 +1,2 @@
-web: gunicorn demo.main --log-file -
+web: gunicorn demo.main:application --log-file -
 
